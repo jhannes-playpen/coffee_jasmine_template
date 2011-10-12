@@ -8,12 +8,12 @@ var exec = function(command) {
 
 var notifyError = function(title, message) {
   console.error(title, message);
-  exec("gmessage --nofocus --borderless --buttons '' --geometry 500x50 --wrap --timeout 3 --bg red \"" + title + ": " + message + "\"");
+  exec("gmessage --nofocus --borderless --buttons '' --geometry 500x50 --wrap --timeout 5 --bg red \"" + title + ": " + message + "\"");
 };
 
 var notifyOk = function(title, message) {
   console.log(title, message);
-  exec("gmessage --nofocus --borderless --buttons '' --geometry 500x50 --wrap --timeout 1 --bg green \"" + title + ": " + message + "\"");
+  exec("gmessage --nofocus --borderless --buttons '' --geometry 500x50 --wrap --timeout 3 --bg green \"" + title + ": " + message + "\"");
 };
 
 var status_reporting = {

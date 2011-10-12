@@ -1,6 +1,6 @@
 var fs = require("fs"),
     path = require("path"),
-    filescanner = require("./filescanner"),
+    filescanner = require("./build/filescanner"),
     coffee = require('./build/coffee-script')
     ;
 
