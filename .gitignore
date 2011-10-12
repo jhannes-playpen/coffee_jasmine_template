@@ -1,4 +1,5 @@
-
-/node.exe
-/spec/*.js
-/src/*.js
+.project
+.settings
+node.exe
+spec/*.js
+src/*.js
