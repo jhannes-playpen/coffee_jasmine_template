@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Graph</title>
+
+  <script type="text/javascript">
+  var exports = {};
+  </script>
+  
+  <script type="text/javascript" src="src/Array.js"></script>
+  <script type="text/javascript" src="src/hunt_wumpus.js"></script>
+  <script type="text/javascript" src="src/jquery-1.6.4.js"></script>
+  <script type="text/javascript" src="src/d3.js?2.3.2"></script>
+  <script type="text/javascript" src="src/d3.layout.js?2.3.2"></script>
+  <script type="text/javascript" src="src/d3.geom.js?2.3.2"></script>
+  
+  <style>
+    line.link { stroke: #999; stroke-opacity: .6; }
+    circle#room-8   { fill:   red; stroke-width: 2px; }
+    circle.visited  { stroke-width: 5px; }
+    circle          { fill:   blue; stroke: black; }
+  </style>
+
+  <script type="text/javascript">
+var cave = new exports.Cave();
+cave.createCave(10);
+  
+  
+window.onload = function() {
+
+var nodes = cave.nodes();
+var links = cave.links();
+
+var w = 960,
+    h = 600,
+    fill = d3.scale.category20();
+
+var vis = d3.select("#chart")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+  var force = d3.layout.force()
+      .charge(-1000)
+      .linkDistance(100)
+      .nodes(nodes)
+      .links(links)
+      .size([w, h])
+      .start();
+
+  var link = vis.selectAll("line.link")
+      .data(links)
+    .enter().append("svg:line")
+      .attr("class", "link")
+      .attr("id", function(d) { return d.id; })
+      .style("stroke-width", function(d) { return 1; })
+;
+
+  var node = vis.selectAll("circle.node")
+      .data(nodes)
+      .enter().append("svg:circle")
+        .attr("r", 10)
+        .attr("class", function(d) { return d.className; })
+        .attr("id", function(d) { return d.id; })
+      ;
+
+  node.append("svg:title")
+      .text(function(d) { return d.name; });
+
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+};
+  </script>
+
+</head>
+
+<body>
+  <div id="people" class="people">
+  </div>
+  <div id="chart">
+  </div>
+</body>
+</html>
