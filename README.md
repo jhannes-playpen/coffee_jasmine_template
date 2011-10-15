@@ -1,8 +1,11 @@
+# CoffeeScript + Jasmine autotest rig
+
 A template project for working with CoffeeScript and Jasmine.
 Compiles .coffee files automatically with node.js and runs Jasmine
 with node.js. Also supports client-side Jasmine with SpecRunner.html
 
 To get started:
+
 * node autotest-gmessage (for Ubuntu Gmessage style notification)
 * Add spec/xxx_spec.coffee 
   * autotest automatically creates xxx_spec.js
