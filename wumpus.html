@@ -10,37 +10,50 @@
   
   <script type="text/javascript" src="src/Array.js"></script>
   <script type="text/javascript" src="src/hunt_wumpus.js"></script>
-  <script type="text/javascript" src="src/jquery-1.6.4.js"></script>
-  <script type="text/javascript" src="src/d3.js?2.3.2"></script>
-  <script type="text/javascript" src="src/d3.layout.js?2.3.2"></script>
-  <script type="text/javascript" src="src/d3.geom.js?2.3.2"></script>
+  <script type="text/javascript" src="src/client/jquery-1.6.4.js"></script>
+  <script type="text/javascript" src="src/client/d3.js?2.3.2"></script>
+  <script type="text/javascript" src="src/client/d3.layout.js?2.3.2"></script>
+  <script type="text/javascript" src="src/client/d3.geom.js?2.3.2"></script>
   
   <style>
-    line.link { stroke: #999; stroke-opacity: .6; }
-    circle#room-8   { fill:   red; stroke-width: 2px; }
-    circle.visited  { stroke-width: 5px; }
-    circle          { fill:   blue; stroke: black; }
+    line.corridor { stroke: #999; stroke-opacity: .6; }
+    line.xmonsters { stroke: red; stroke-width: 2px; }
+    line.unknown  { display: none; }
+    line.xunknown  { stroke-opacity: .2; }
+        
+    circle          { stroke-width: 2px; fill: blue; stroke: black; stroke-dasharray: 5,5 }
+
+    circle.near-bats{ fill:   yellow; }
+    circle.near-wumpus     { fill:   orange; }
+    circle.near-monsters     { fill:   red; }
+    circle.unvisited { fill: white; }
+    
+    circle.adjacent { stroke-dasharray: 0 }
+
+    circle.player   { stroke-width: 4px; }
+    circle.bats     { stroke:   red; }
+    circle.wumpus   { stroke:   orange; fill: orange }
+    circle.unknown  { display: none; }
+    circle.xunknown  { stroke-opacity: .2; fill-opacity: .2; }
   </style>
 
   <script type="text/javascript">
 var cave = new exports.Cave();
-cave.createCave(10);
+cave.createCave(20, 0.1, 0.15);
   
   
 window.onload = function() {
+  var nodes = cave.nodes();
+  var links = cave.links();
 
-var nodes = cave.nodes();
-var links = cave.links();
+  var w = 960,
+      h = 600,
+      fill = d3.scale.category20();
 
-var w = 960,
-    h = 600,
-    fill = d3.scale.category20();
-
-var vis = d3.select("#chart")
-  .append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
-
+  var vis = d3.select("#chart")
+    .append("svg:svg")
+      .attr("width", w)
+      .attr("height", h);
   var force = d3.layout.force()
       .charge(-1000)
       .linkDistance(100)
@@ -48,26 +61,19 @@ var vis = d3.select("#chart")
       .links(links)
       .size([w, h])
       .start();
-
   var link = vis.selectAll("line.link")
       .data(links)
     .enter().append("svg:line")
-      .attr("class", "link")
-      .attr("id", function(d) { return d.id; })
-      .style("stroke-width", function(d) { return 1; })
-;
-
+      .attr("class", function(d) { return d.className; })
+      .attr("id", function(d) { return d.id; });
   var node = vis.selectAll("circle.node")
       .data(nodes)
       .enter().append("svg:circle")
         .attr("r", 10)
         .attr("class", function(d) { return d.className; })
-        .attr("id", function(d) { return d.id; })
-      ;
-
+        .attr("id", function(d) { return d.id; });
   node.append("svg:title")
-      .text(function(d) { return d.name; });
-
+      .text(function(d) { return d.title; });
 
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
@@ -76,15 +82,37 @@ var vis = d3.select("#chart")
         .attr("y2", function(d) { return d.target.y; });
 
     node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+        .attr("cy", function(d) { return d.y; });        
   });
+  
+  
+  
+  $(".room").click(function() {
+    var charging = window.event.ctrlKey;
+  
+    var roomNumber = parseInt(this.id.substr("room-".length));
+    cave.walkTo(roomNumber, function(message) {
+      alert(message);
+    }, charging);
+    var nodes = cave.nodes()
+    for (var i=0; i<nodes.length; i++) {
+      $("#" + nodes[i].id).attr("class", nodes[i].className);
+      $("#" + nodes[i].id + " svg:title").text(nodes[i].className);
+    }
+    var links = cave.links()
+    for (var i=0; i<links.length; i++) {
+      $("#" + links[i].id).attr("class", links[i].className);
+    }
+  });
+
 };
   </script>
 
 </head>
 
 <body>
-  <div id="people" class="people">
+  <div id="instructions">
+  Click on a neighboring room (solid) to walk to the room. Charge the Wumpus by ctrl-clicking when you think you know where he is. Avoid corridors with monsters and rooms with bats. If a nearby corridor has monsters, the room is red, if a nearby room has bats, the cave is yellow. If a nearby room has the Wumpus, the room is orange. If the room is white, you haven't been there yet. If blue, everything is safe.
   </div>
   <div id="chart">
   </div>
