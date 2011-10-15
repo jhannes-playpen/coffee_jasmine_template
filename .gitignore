@@ -3,3 +3,5 @@
 node.exe
 spec/*.js
 src/*.js
+*~
+

@@ -63,7 +63,14 @@ var executeJasmineTests = function(status_reporting) {
         tests += 1;
         var spec = runner.topLevelSuites()[i].specs()[j];
         if (spec.results().failedCount > 0) {
-          messages.push(spec.results().description + ": " + spec.results().getItems()[0].message);
+          var spec_messages = [];
+          for (var k=0; k<spec.results().getItems().length; k++) {
+            var item = spec.results().getItems()[k];
+            if (!item.passed()) {
+              spec_messages.push(item.message);
+            }
+          }
+          messages.push(spec.results().description + ": " + spec_messages.join(", "));
         }
       }
     }
