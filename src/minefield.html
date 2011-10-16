@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>Minefield</title>
+  <link href="minefield.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript">var exports = {};</script>
+  <script type="text/javascript" src="minefield.js"></script>
+  <script type="text/javascript" src="client/jquery-1.6.4.js"></script>
+  <script>
+$(function() {
+  var minefield = new exports.Minefield([".....","...**","*..*.","*...."])
+
+  var explore = function() {
+    minefield.explore($(this).attr("data-cell"));
+    renderMinefield(); 
+  };
+
+  var renderMinefield = function() {
+    $("#minefield tbody").html(minefield.html());
+    $("#minefield td").click(explore);  
+  };
+
+  renderMinefield();
+});
+  </script>
+</head>
+<body>
+  <table id="minefield">
+    <tbody></tbody>
+  </table>
+</body>
+</html>
