@@ -29,14 +29,18 @@ class exports.Minefield
     (@htmlRow_(row) for row in [0...@mines.length]).join("")
   htmlRow_: (row)->
     "<tr>" + (@htmlCell_(row,column) for column in [0...@mines[row].length]).join("") + "</tr>"
+  cellClass_: (row,column)->
+    return "unknown" unless @explored_[row][column]
+    return "mine triggered" if @exploded_[0] == row and @exploded_[1] == column
+    return "mine" if @hasMine_(row,column)
+    "mines-#{@hints_[row][column]}"
+  cellText_: (row,column)->
+    return "?" unless @explored_[row][column]
+    return "*" if @hasMine_(row,column)
+    return @hints_[row][column]
   htmlCell_: (row,column)->
     cellAttr = "data-cell='#{row},#{column}'"
-    return "<td class='unknown' #{cellAttr}>?</td>" unless @explored_[row][column]
-    return "<td class='mine triggered' #{cellAttr}>*</td>" if @exploded_[0] == row and @exploded_[1] == column
-    return "<td class='mine explored' #{cellAttr}>*</td>" if @hasMine_(row,column) and @victory
-    return "<td class='mine' #{cellAttr}>*</td>" if @hasMine_(row,column)
-    hint = @hints_[row][column]
-    return "<td class='mines-#{hint}' #{cellAttr}>#{hint}</td>"
+    "<td class='#{@cellClass_(row,column)}' #{cellAttr}>#{@cellText_(row,column)}</td>"
     
   explore: (coordinates)->
     @exploreCell_( (parseInt(i) for i in coordinates.split(",")) )
