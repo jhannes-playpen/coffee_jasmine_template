@@ -23,6 +23,9 @@ var status_reporting = {
   test_failures : function(message) {
     notifyError("Test failure", message);
   },
+  test_load_failure : function(message) {
+    notifyError("Jasmine load error", message);
+  },
   compile_ok : function(message) {
     notifyOk("Compile ok", message);
   },

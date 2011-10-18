@@ -23,6 +23,9 @@ var status_reporting = {
   test_none_ran : function(message) {
     console.log("Not tests to run", message);
   },
+  test_load_failure : function(message) {
+    notifyError("Jasmine load error", message);
+  },
   test_failures : function(message) {
     notifyError("Test failure", message);
   },
