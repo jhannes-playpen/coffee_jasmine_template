@@ -86,18 +86,33 @@ var executeJasmineTests = function(status_reporting) {
   jasmine.currentEnv_ = new jasmine.Env();
   var jasmineEnv = jasmine.getEnv();
   jasmineEnv.addReporter(new TerminalReporter({print:sys.print,verbose:true,color:true,onComplete:jasmineComplete,stackFilter: removeJasmineFrames}));
+  try {
+    loadJasmineFiles();
+  } catch (err) {
+    status_reporting.test_load_failure(err.message);
+  }
+  jasmineEnv.execute();
+};
+
+var loadJasmineFiles = function() {
   var exports = this.exports || {};
   var src_files = fs.readdirSync("./src");
   for (var i=0; i<src_files.length; i++) {
-    if (src_files[i].match(/\.js$/))
-      eval(fs.readFileSync("./src/" + src_files[i], "utf-8"));
+    evalJavascriptFile("./src/" + src_files[i]);
   }
   var spec_files = fs.readdirSync("./spec");
   for (var i=0; i<spec_files.length; i++) {
-    if (spec_files[i].match(/\.js$/))
-      eval(fs.readFileSync("./spec/" + spec_files[i], "utf-8"));
+    evalJavascriptFile("./spec/" + spec_files[i]);
   }
-  jasmineEnv.execute();
+};
+
+var evalJavascriptFile = function(file) {
+  if (!file.match(/\.js$/)) return;
+  try {
+    eval(fs.readFileSync(file, "utf-8"));
+  } catch (err) {
+    throw new Error(file + ": " + err.message);
+  }
 };
 
 var runJasmineTests = function(notifications, status_reporting) {
