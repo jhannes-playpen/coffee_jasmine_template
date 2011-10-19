@@ -5,7 +5,7 @@ var fs = require("fs"),
     ;
 
 var compileCoffee = function(coffee_file, status_reporting) {
-  var js_file = coffee_file.replace(/\.coffee$/, ".js")
+  var js_file = coffee_file.replace(/\.coffee$/, ".js").replace(/\/src/, "/app/src").replace(/\/spec/, "/app/spec");
   var jsFilePresent = path.existsSync(js_file);
   if (jsFilePresent && fs.statSync(coffee_file).mtime <= fs.statSync(js_file).mtime) return;
   console.log("compiling", coffee_file);
@@ -30,7 +30,7 @@ var compile = function(file, status_reporting) {
 
 var deleteCompiledFile = function(original) {
   if ( original.match(/.coffee$/) ) {
-    var js_file = original.replace(/\.coffee$/, ".js")
+    var js_file = original.replace(/\.coffee$/, ".js").replace(/\/src/, "/app/src").replace(/\spec/, "/app/spec");
     console.log("deleting", js_file);
     fs.unlinkSync(js_file);
   }
@@ -87,15 +87,15 @@ var executeJasmineTests = function(status_reporting) {
   var jasmineEnv = jasmine.getEnv();
   jasmineEnv.addReporter(new TerminalReporter({print:sys.print,verbose:true,color:true,onComplete:jasmineComplete,stackFilter: removeJasmineFrames}));
   var exports = this.exports || {};
-  var src_files = fs.readdirSync("./src");
+  var src_files = fs.readdirSync("./app/src");
   for (var i=0; i<src_files.length; i++) {
     if (src_files[i].match(/\.js$/))
-      eval(fs.readFileSync("./src/" + src_files[i], "utf-8"));
+      eval(fs.readFileSync("./app/src/" + src_files[i], "utf-8"));
   }
-  var spec_files = fs.readdirSync("./spec");
+  var spec_files = fs.readdirSync("./app/spec");
   for (var i=0; i<spec_files.length; i++) {
     if (spec_files[i].match(/\.js$/))
-      eval(fs.readFileSync("./spec/" + spec_files[i], "utf-8"));
+      eval(fs.readFileSync("./app/spec/" + spec_files[i], "utf-8"));
   }
   jasmineEnv.execute();
 };

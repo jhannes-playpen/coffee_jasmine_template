@@ -1,7 +1,7 @@
 .project
 .settings
 node.exe
-spec/*.js
-src/*.js
+app/spec/*.js
+app/src/*.js
 *~
 
