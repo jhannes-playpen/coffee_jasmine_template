@@ -5,7 +5,6 @@ var fs = require("fs"),
     ;
 
 var compileCoffee = function(coffee_file, status_reporting) {
-  console.log(coffee_file);
   var js_file = coffee_file.replace(/\.coffee$/, ".js").replace(/\/src/, "/app/src").replace(/\/spec/, "/app/spec");
   var jsFilePresent = path.existsSync(js_file);
   if (jsFilePresent && fs.statSync(coffee_file).mtime <= fs.statSync(js_file).mtime) return;
