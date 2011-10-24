@@ -1,7 +1,7 @@
 table#minefield td { border: solid black; height: 1.2em; width: 1.2em; text-align: center; }
 td         { font-weight: bold; font-size: 5em; }
 
-td.unknown  { color: gray; }
+td.unexplored  { color: gray; }
 td.mine     { color: black; }
 td.triggered { background-color: pink; }
 td.explored { color: black; background-color: lime; }
