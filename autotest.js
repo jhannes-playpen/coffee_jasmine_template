@@ -36,7 +36,7 @@ var deleteCompiledFile = function(original) {
   }
 };
 
-var executeJasmineTests = function(status_reporting) {
+var executeJasmineTests = function(status_reporting, upload_destination) {
   var removeJasmineFrames = function (text) {
     var lines = [];
     text.split(/\n/).forEach(function(line){
@@ -80,6 +80,7 @@ var executeJasmineTests = function(status_reporting) {
       status_reporting.test_none_ran("No tests");
     } else {
       status_reporting.test_success(tests + " tests ok");
+      redeploy(status_reporting, upload_destination);
     }
   };
 
@@ -115,26 +116,43 @@ var evalJavascriptFile = function(file) {
   }
 };
 
-var runJasmineTests = function(notifications, status_reporting) {
+var runJasmineTests = function(notifications, status_reporting, upload_destination) {
   var existingFiles = [];
   existingFiles = existingFiles.concat(notifications.initial);
   existingFiles = existingFiles.concat(notifications.created);
   existingFiles = existingFiles.concat(notifications.modified);
   for (var i=0; i<existingFiles.length; i++) {
     if (existingFiles[i] && existingFiles[i].match(/\.js$/)) {
-      executeJasmineTests(status_reporting);
+      executeJasmineTests(status_reporting, upload_destination);
       return;
     }
   }
   console.log("Not new JS files - tests not run", existingFiles);
 };
 
+var redeploy = function(status_reporting, upload_destination) {
+  if (!upload_destination) {
+    return;
+  }
+  var exec  = require('child_process').exec;
+  var deployCommand = 'scp -r src/* ' + upload_destination;
+  console.log("Uploading: " + deployCommand);
+  var child = exec(deployCommand, function (error, stdout, stderr) {
+    if (error !== null) {
+      status_reporting.upload_failure(error);
+    } else {
+      status_reporting.upload_complete(deployCommand);
+    }
+  });
+};
+
+
 var eachFile = function(files, f, status_reporting) {
   if (!files) return;
   for (var i=0; i<files.length; i++) f(files[i], status_reporting);
 };
 
-exports.autotest = function(files, status_reporting) {
+exports.autotest = function(files, status_reporting, upload_destination) {
   if (files.length > 0) {
       eachFile(files, compile, status_reporting);
   } else {
@@ -143,7 +161,7 @@ exports.autotest = function(files, status_reporting) {
       eachFile(notifications.created, compile, status_reporting);
       eachFile(notifications.modified, compile, status_reporting);
       eachFile(notifications.deleted, deleteCompiledFile, status_reporting);
-      runJasmineTests(notifications, status_reporting);
+      runJasmineTests(notifications, status_reporting, upload_destination);
     });
   }
 };

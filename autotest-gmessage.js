@@ -2,7 +2,7 @@ var child_process = require('child_process');
 var autotest = require('./autotest').autotest;
 
 var exec = function(command) {
-  console.log(command);
+  //console.log(command);
   child_process.exec(command);
 }
 
@@ -34,11 +34,16 @@ var status_reporting = {
   },
   recompile_ok : function(message) {
     console.log("Recompiled", message);
+  },
+  upload_complete : function(message) {
+    notifyOk("Upload complete", message);
+  },
+  upload_failure : function(message) {
+    notifyError("Upload failed", message);
   }
 };
 
 
 files = process.argv.slice(2);
 
-autotest(files, status_reporting);
-
+autotest(files, status_reporting, "jhannes@coffee.k33x.com:coffee.k33x.com/example/");
