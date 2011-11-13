@@ -10,6 +10,7 @@ class MinefieldRenderer
     "<td class='#{@tdClass(val)}' data-row='#{row}' data-col='#{col}'>#{val}</td>"
   tdClass: (value)->
     return "unexplored" if value == '?'
+    return "triggered" if value == '!'
     return "mine" if value == '*'
     return "mines-#{value}"
 
