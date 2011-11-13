@@ -14,9 +14,10 @@ describe "Display minefield", ->
     expect(squareField.td(1,2)).toMatch(/>0<\/td/)
   it "shows cell class", ->
     expect(squareField.td(1,2)).toMatch(/class='mines-0'/)
-  it "find cell class", ->
+  it "shows cell class", ->
     expect(squareField.tdClass('?')).toEqual("unexplored")
     expect(squareField.tdClass('*')).toEqual("mine")
+    expect(squareField.tdClass('!')).toEqual("triggered")
     expect(squareField.tdClass(3)).toEqual("mines-3")
     expect(squareField.tdClass(6)).toEqual("mines-6")
 
