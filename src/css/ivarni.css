@@ -1,0 +1,43 @@
+div.slide {
+  background: url("../media/steria_logo.png") 10px 10px no-repeat, url("../media/cork_1.png") scroll;
+} 
+
+img.profile {
+  width: 200px;
+  height: auto;
+}
+
+p.author {
+  font-weight: bold;
+}
+
+#outro-slide h2 {
+  color: black;
+  letter-spacing: -1px;
+  font-size: 64px;
+}
+
+p.resource-link {
+  font-size: 36px;
+  line-height: 1.15em;
+  margin: 0.8em 0;
+}
+
+p.resource-link a {
+  color: blue;
+  text-decoration: underline;
+  border: none;
+}
+
+span.author {
+  font-weight: bold;
+  font-size: 26px;
+  letter-spacing: -2px;
+}
+
+div.slide.future,
+div.slide.far-future,
+div.slide.past,
+div.slide.far-past  {
+  display:none;
+}
