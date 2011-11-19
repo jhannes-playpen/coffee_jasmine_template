@@ -395,7 +395,6 @@
 
     /*
      * Presentation timer: liberally borrowed from http://github.com/LeaVerou/CSSS
-     */
     (function() {
         var duration = parseInt($("body").attr("data-duration"), 10);
         if (duration > 0) {
@@ -408,4 +407,6 @@
             createTimer("timer", duration);
         }
     })();
+     */
+
 })();
