@@ -69,6 +69,12 @@
           </aside>
         </div>
 
+	<div class="slide" id="game">
+	  <section class="middle">
+	    <table id="minefield"/>
+	  </section>
+	</div>
+
          <div class="slide" id="outro-slide">
           <section class="middle">
             <h1>Takk for oss!</h1>
@@ -109,11 +115,31 @@
     </script>
     <script>CFInstall.check({ mode: "overlay" });</script>
     <![endif]-->
+    <script type="text/javascript">
+      var exports = {};
+    </script>
 
     <script src="js/ender.min.js"></script>
     <script src="js/prefixfree.min.js"></script>
     <script src="js/prettify.js"></script>
     <script src="js/utils.js"></script>
+    <script type="text/javascript" src="minefield.js"></script>
+    <script type="text/javascript" src="minefield_renderer.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var minefield = new exports.Minefield({mines:["....",".*..",".*.*","...*"]});
+        var renderer = new exports.MinefieldRenderer(minefield);
+        var clickCell = function() {
+          minefield.explore($(this).data("row"), $(this).data("col"));
+          $("#minefield").html(renderer.html());
+          $("#minefield td").click(clickCell);
+        };
+
+        $("#minefield").html(renderer.html());
+        $("#minefield td").click(clickCell);
+      });
+    </script>
+
     <script>prettyPrint();</script>
   </body>
 </html>
