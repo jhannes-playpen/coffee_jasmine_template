@@ -33,6 +33,7 @@
     <link href="css/ivarni.css" rel="stylesheet"/>
     <link href="css/moon.css" class="theme" rel="stylesheet" media="screen" />
     <link href="css/prez.css" rel="stylesheet" media="screen" />
+    <link rel="stylesheet" href="minefield.css"/>
 
   </head>
   <body data-duration="10">
@@ -71,7 +72,7 @@
 
 	<div class="slide" id="game">
 	  <section class="middle">
-	    <table id="minefield"/>
+	    <table id="minefield"></table>
 	  </section>
 	</div>
 
@@ -126,18 +127,15 @@
     <script type="text/javascript" src="minefield.js"></script>
     <script type="text/javascript" src="minefield_renderer.js"></script>
     <script type="text/javascript">
-      $(function() {
         var minefield = new exports.Minefield({mines:["....",".*..",".*.*","...*"]});
         var renderer = new exports.MinefieldRenderer(minefield);
         var clickCell = function() {
           minefield.explore($(this).data("row"), $(this).data("col"));
-          $("#minefield").html(renderer.html());
+  	  document.getElementById("minefield").innerHTML = renderer.html();
           $("#minefield td").click(clickCell);
         };
-
-        $("#minefield").html(renderer.html());
+	document.getElementById("minefield").innerHTML = renderer.html();
         $("#minefield td").click(clickCell);
-      });
     </script>
 
     <script>prettyPrint();</script>
