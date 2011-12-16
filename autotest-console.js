@@ -19,6 +19,9 @@ var status_reporting = {
   test_failures : function(message) {
     notifyError("Test failure", message);
   },
+  test_load_failure : function(message) {
+    notifyError("Test load failure", message);
+  },
   compile_ok : function(message) {
     notifyOk("Compile ok", message);
   },
@@ -39,5 +42,5 @@ var status_reporting = {
 
 files = process.argv.slice(2);
 
-autotest(files, status_reporting, "jhannes@coffee.k33x.com:coffee.k33x.com/example/");
+autotest(files, status_reporting);
 
