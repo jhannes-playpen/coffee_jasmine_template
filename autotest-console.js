@@ -39,5 +39,5 @@ var status_reporting = {
 
 files = process.argv.slice(2);
 
-autotest(files, status_reporting, "jhannes@coffee.k33x.com:coffee.k33x.com/example/");
+autotest(files, status_reporting);
 
